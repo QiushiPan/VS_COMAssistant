@@ -1,0 +1,187 @@
+﻿<Window x:Class="SerialCom.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc= "clr-namespace:SerialCom"
+        WindowStartupLocation="CenterScreen"
+        Title="NattierSEA Client" 
+        Height="570" MinHeight="565" Width="1000" MinWidth="800"  
+        Closed="Window_Closed" Closing="Window_Closing" 
+        Loaded="Window_Loaded" 
+        ResizeMode="CanResizeWithGrip"  BorderThickness="0">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open"
+            Executed="FileOpen" />
+        <CommandBinding Command="ApplicationCommands.Save"
+            Executed="FileSave" />
+        <CommandBinding Command="ApplicationCommands.Close"
+            Executed="Window_Closed" />
+    </Window.CommandBindings>
+    <Window.Background >
+        <ImageBrush ImageSource="image\background.png"/>
+    </Window.Background>
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="400"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition MinHeight="378"></RowDefinition>
+                <RowDefinition Height="20"></RowDefinition>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Top"   >
+
+            </DockPanel>
+            <Grid Grid.Row="1" Grid.Column="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" ></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="230"></RowDefinition>
+                        <RowDefinition Height="90"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" ></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Name="Port" Text="串口号:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"></TextBlock>
+                        <TextBlock Name="BaundRate" Text="波特率:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"></TextBlock>
+                        <TextBlock Name="Parity" Text="校验位:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"></TextBlock>
+                        <TextBlock Name="DataBits" Text="数据位:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"></TextBlock>
+                        <TextBlock Name="StopBits" Text="停止位:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"></TextBlock>
+                        <ComboBox Name="AvailableComCbobox" ToolTip="点击刷新" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" Margin="0,5,0,0" PreviewMouseDown="AvailableComCbobox_PreviewMouseDown" SelectionChanged="AvailableComCbobox_SelectionChanged" />
+                        <ComboBox Name="RateListCbobox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                        <ComboBox Name="ParityComCbobox"  Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="0,5,0,0" />
+                        <ComboBox Name="DataBitsCbobox"   Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                        <ComboBox Name="StopBitsCbobox"   Grid.Row="4" Grid.Column="1" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                        <Button Content="重置" Name="defaultSet" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,1,0,1" Click="defaultSet_Click" ></Button>
+                        <Button  Content="打开串口" Click="Button_Open" Name="openBtn" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"  Height="45" />
+                        <Image Name="OpenImage" Source="image\Off.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40"  Grid.Row="7" Grid.Column="0"   Width="40"/>
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Image Name="logo" Source="image\USTBLOGO.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Grid.Row="0" Margin="0,0,0,0"/>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="状态监测区" VerticalAlignment="Bottom"  Margin="10,0,0,0" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <Label Content="已暂停监测，点击开启→" Name="recPrompt" Grid.Row="0" Grid.Column="0" Margin="0,0,170,0" HorizontalAlignment="Right" Visibility="Hidden" Foreground="#FFFFFF2F" Background="{x:Null}"  />
+                    <Button Content="暂停监测" Name="stopRecBtn" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Width="75" Margin="0,3,100,0" Click="stopRecBtn_Click"/>
+                    <Button Content="清空监测区" Name="recClearBtn" HorizontalAlignment="Right"  Grid.Row="0" Grid.Column="0" Width="75" Margin="0,3,5,0" Click="recClearBtn_Click"/>
+                    <Border Name="recBorder" BorderThickness="1" Margin="11,1,6,1" Grid.Row="1" Grid.Column="0" BorderBrush="#FF911C1C"  Background="White" Opacity="0.4"   />
+                    <ScrollViewer   Name="recScrol" VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="0" Padding="0,0,0,0" Margin="12,2,7,2"  >
+
+                        <TextBox x:Name="recTBox"   TextWrapping="Wrap"  ScrollViewer.VerticalScrollBarVisibility="Auto" AcceptsReturn="True" Background="{x:Null}" ClipToBounds="True" Foreground="Black"   />
+                    </ScrollViewer>
+                    <Line Width="500" Height="500" Fill="#FFD13535" Stroke="#FFD81010" OpacityMask="Black"></Line>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Margin="0,10.2,-0.4,10" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="45"></RowDefinition>
+                    <RowDefinition Height="45"></RowDefinition>
+                    <RowDefinition Height="45"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="70" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
+                    <TextBlock Text="节点号" Name="节点" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <ComboBox Name="Node" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="90" Margin="70,5,23,5" SelectionChanged="Node_SelectionChanged"/>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Height="70" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
+                    <Button Content="清空" Name="Tem" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Width="90" Click="Clear"/>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" >
+                    <TextBlock Text="温度" Name="wendu" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <TextBox Text="" Name="TempView" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="70,5,23,5" Width="38" KeyDown="Time_KeyDown" LostFocus="Time_LostFocus" TextChanged="Time_TextChanged"/>
+                    <TextBlock Text="℃" Name="sheshidu" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12" Grid.Row="2" Grid.Column="0" Margin="0,6,2,6"></TextBlock>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" >
+                    <Button Content="测量温度" Name="TempMeausing" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Width="90" Click="MeasureTemp" ></Button>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" >
+                    <TextBlock Text="温度" Name="shidu" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <TextBox Text="" Name="HumView" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="70,5,23,5" Width="38" KeyDown="Time_KeyDown" LostFocus="Time_LostFocus" TextChanged="Time_TextChanged"/>
+                    <TextBlock Text="％RH" Name="shidudanwei" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12" Grid.Column="0" Margin="0,6,-15,6"/>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" >
+                    <Button Content="测量湿度" Name="HumMeausing" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Width="90" Click="MeasureHum"></Button>
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" >
+                    <TextBlock Text="光照强度" Name="guangqiang" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <TextBox Text="" Name="LightView" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="70,5,23,5" Width="38" KeyDown="Time_KeyDown" LostFocus="Time_LostFocus" TextChanged="Time_TextChanged"/>
+                    <TextBlock Text="lx" Name="guangqiangdanwei" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12" Grid.Row="2" Grid.Column="0" Margin="0,6,2,6"></TextBlock>
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" >
+                    <Button Content="测量光照强度" Name="LightMeausing" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Width="90" Click="MeasureLight"></Button>
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" >
+                    <TextBlock Text="空气质量" Name="kongqi" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <TextBox Text="" Name="AirView" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="70,5,23,5" Width="38" KeyDown="Time_KeyDown" LostFocus="Time_LostFocus" TextChanged="Time_TextChanged"/>
+                    <TextBlock Text="ppm" Name="kongqidanwei" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="12" Grid.Column="0" Margin="0,17,-15,17"/>
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" >
+                    <Button Content="测量空气质量" Name="AirMeausing" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Width="90" Click="MeasureAir"></Button>
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="2">
+                    <TextBlock Text="RFID节点" Name="jieidanhao" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <TextBox Text="" Name="RfidNode" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="70,5,23,5" Width="75" KeyDown="Time_KeyDown" LostFocus="Time_LostFocus" TextChanged="Time_TextChanged"/>
+                </Grid>
+                <Grid Grid.Row="6" Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="2">
+                    <TextBlock Text="RFID卡号" Name="kahao" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Grid.Row="0" Grid.Column="0"></TextBlock>
+                    <TextBox Text="" x:Name="RfidNum"   HorizontalAlignment="Left" VerticalAlignment="Center" 
+                               AcceptsReturn="True" ClipToBounds="True" Foreground="Black"   Margin="70,5,-82.4,5" Height="17" Width="128" TextChanged="RfidNum_TextChanged"   />
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="0">
+                    <Button  Content="舵机左转" x:Name="TurnLeft" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1"  Grid.Column="1" Height="25" Width="80" Click="EngineTurnLeft"/>
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="1">
+                    <Button  Content="舵机右转" x:Name="TurnRight" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1"  Grid.Column="1" Height="25" Width="80" Click="EngineTurnRight"/>
+                </Grid>
+                <Grid Grid.Row="8" Grid.Column="0">
+                    <Button  Content="继电器开" x:Name="MyRelayOn" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1"  Grid.Column="1" Height="25" Width="80" Click="RelayOn"/>
+                </Grid>
+                <Grid Grid.Row="8" Grid.Column="1">
+                    <Button  Content="继电器关" x:Name="MyRelayOff" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1"  Grid.Column="1" Height="25" Width="80" Click="RelayOff"/>
+                </Grid>
+                <Grid Grid.Row="9" Grid.Column="0">
+                    <Button  Content="蜂鸣器开" x:Name="MyBeepOn" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1"  Grid.Column="1" Height="25" Width="80" Click="BeepOn"/>
+                </Grid>
+                <Grid Grid.Row="9" Grid.Column="1">
+                    <Button  Content="蜂鸣器关" x:Name="MyBeepOff" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1"  Grid.Column="1" Height="25" Width="80" Click="BeepOff"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
